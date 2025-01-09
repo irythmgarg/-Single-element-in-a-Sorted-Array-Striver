@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int singleNonDuplicate(vector<int>& nums) {
+        // Initialize start and end pointers
+        int s = 0;
+        int e = nums.size() - 1;
+
+        // Handle edge cases where single element is at boundaries
+        if (nums.size() == 1) return nums[0]; // Single-element array
+        if (nums[0] != nums[1]) return nums[0]; // Single element is the first element
+        if (nums[e] != nums[e - 1]) return nums[e]; // Single element is the last element
+
+        // Perform binary search
+        while (s <= e) {
+            int mid = s + (e - s) / 2;
+
+            // Check if nums[mid] is the single element
+            if (nums[mid] != nums[mid - 1] && nums[mid] != nums[mid + 1]) {
+                return nums[mid];
+            }
+
+            // Determine which half to search based on the pairing pattern
+            if ((mid % 2 == 0 && nums[mid] == nums[mid + 1]) || 
+                (mid % 2 == 1 && nums[mid] == nums[mid - 1])) {
+                s = mid + 1; // Move to the right half
+            } else {
+                e = mid - 1; // Move to the left half
+            }
+        }
+
+        // Return -1 if no single element is found (should not happen for valid input)
+        return -1;
+    }
+};
